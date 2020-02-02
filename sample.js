@@ -22,15 +22,40 @@ var uuid = require('node-uuid');
 var s3 = new AWS.S3();
 
 // Create a bucket and upload something into it
-var bucketName = 'node-sdk-sample-' + uuid.v4();
-var keyName = 'hello_world.txt';
+// var bucketName = 'node-sdk-sample-' + uuid.v4();
+var bucketName = 'node-sdk-sample-474a2855-0aaa-45a1-a2e0-0a8e7c0bbf1f';
+var keyName = 'hello_world1.txt';
 
-s3.createBucket({Bucket: bucketName}, function() {
-  var params = {Bucket: bucketName, Key: keyName, Body: 'Hello World!'};
-  s3.putObject(params, function(err, data) {
-    if (err)
-      console.log(err)
-    else
-      console.log("Successfully uploaded data to " + bucketName + "/" + keyName);
+// s3.createBucket({Bucket: bucketName}, function() {
+//   var params = {Bucket: bucketName, Key: keyName, Body: 'Hello World!'};
+//   s3.putObject(params, function(err, data) {
+//     if (err)
+//       console.log(err)
+//     else
+//       console.log("Successfully uploaded data to " + bucketName + "/" + keyName);
+//   });
+// });
+//   var params = {Bucket: bucketName, Key: keyName, Body: 'Hello World!'};
+//   s3.putObject(params, function(err, data) {
+//     if (err)
+//       console.log(err)
+//     else
+//       console.log("Successfully uploaded data to " + bucketName + "/" + keyName);
+//   });
+
+function uploadFile (buffer, fileName) {
+  return new Promise((resolve, reject) => {
+    s3.putObject({
+      Body: buffer,
+      Key: keyName,
+      Bucket: bucketName,
+    }, (error) => {
+      if (error) {
+        reject(error);
+      } else {
+        console.info(`${fileName} uploaded to ${BUCKET_NAME} succesfully.`);
+        resolve(fileName);
+      }
+    });
   });
-});
+}
